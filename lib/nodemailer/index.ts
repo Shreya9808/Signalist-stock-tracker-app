@@ -1,10 +1,10 @@
 import nodemailer from 'nodemailer'
-import {WELCOME_EMAIL_TEMPLATE} from "@/lib/nodemailer/template";
+import { WELCOME_EMAIL_TEMPLATE, NEWS_SUMMARY_EMAIL_TEMPLATE } from '@/lib/nodemailer/templates';
 export const transport = nodemailer.createTransport({
     service:'gmail',
     auth:{
         user:process.env.NODEMAILER_EMAIL!,
-        pass:process.env.NODEMAILER_PASSWORDS!,
+        pass:process.env.NODEMAILER_PASSWORD!,
     }
 })
 export const sendWelcomeEmail=async ({email,name,intro}:WelcomeEmailData)=>{
@@ -14,9 +14,23 @@ export const sendWelcomeEmail=async ({email,name,intro}:WelcomeEmailData)=>{
         from:`"Signalist" <signalist@sl.pro>`,
         to:email,
         subject:`Welcome to Signalist - your stock market Toolkit is ready!`,
-        text:'Thanks fro Joining Signalist',
+        text:'Thanks for Joining Signalist',
         html: htmlTemplate,
 
     }
+    await transport.sendMail(mailOptions);
+}
+
+export const sendNewsSummaryEmail = async ({email, date, newsContent}: {email: string, date: string, newsContent: string}) => {
+    const htmlTemplate = NEWS_SUMMARY_EMAIL_TEMPLATE.replace('{{date}}', date).replace('{{newsContent}}', newsContent);
+
+    const mailOptions = {
+        from: `"Signalist" <signalist@sl.pro>`,
+        to: email,
+        subject: `Market News Summary - ${date}`,
+        text: `Market news summary for ${date}`,
+        html: htmlTemplate,
+    }
+
     await transport.sendMail(mailOptions);
 }

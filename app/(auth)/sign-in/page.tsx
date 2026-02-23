@@ -4,13 +4,13 @@ import { useForm } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
 import InputField from '@/components/forms/InputField';
 import FooterLink from '@/components/forms/FooterLink';
-import {useRouter} from "next/navigation";
-import {signInWithEmail} from "@/lib/actions/auth.actions";
+import {signInWithEmail, signUpWithEmail} from "@/lib/actions/auth.actions";
 import {toast} from "sonner";
-
+import {signInEmail} from "better-auth/api";
+import {useRouter} from "next/navigation";
 
 const SignIn = () => {
-    const router=useRouter()
+    const router = useRouter()
     const {
         register,
         handleSubmit,
@@ -30,11 +30,10 @@ const SignIn = () => {
         } catch (e) {
             console.error(e);
             toast.error('Sign in failed', {
-                description: e instanceof Error ? e.message : 'Failed to Sign In.'
+                description: e instanceof Error ? e.message : 'Failed to sign in.'
             })
         }
     }
-
 
     return (
         <>
